@@ -17,6 +17,7 @@
 #'     \item{`gamma_star`}{CO2 photocompensation point, same units as CO2.}
 #'     \item{`phi_J`}{quantum efficiency, unitless.}
 #'     \item{`theta_J`}{Convexity factor for response of J to light, unitless.}
+#'     \item{`alpha_tpu`}{Fraction of  the glycolate carbon that is not returned to the chloroplast, unitless.}
 #'   }
 #' @param Ct Optional input (default = `NULL`). A numeric vector of two element:
 #' first is Ci transition between the Rubisco and RuBP Regeneration limitations
@@ -36,7 +37,7 @@
 #' @export
 
 
-FvCB1980 = function(envs,pars,Ct=NULL) {
+Caemmerer2000 = function(envs,pars,Ct=NULL) {
 
   light_response = function(J, PPFD, J_max, phi_J, theta_J) {
     theta_J * J^2 - J * (J_max + phi_J * PPFD) + J_max * phi_J * PPFD
@@ -56,7 +57,7 @@ FvCB1980 = function(envs,pars,Ct=NULL) {
     # Wc = pars$V_cmax * envs$C_chl / (envs$C_chl + pars$K_C * (1 + 1e3 * envs$O / pars$K_O)),
     Wc = pars$V_cmax * envs$C_chl / (envs$C_chl + pars$K_CO),
     Wj = J * envs$C_chl / (4 * envs$C_chl + 8 * pars$gamma_star),
-    Wp = 3 * pars$V_tpu * envs$C_chl / (envs$C_chl - pars$gamma_star)
+    Wp = 3 * pars$V_tpu * envs$C_chl / (envs$C_chl - (1+3*pars$alpha_tpu)*pars$gamma_star)
   )
 
   Wmin <- c()
@@ -101,4 +102,18 @@ FvCB1980 = function(envs,pars,Ct=NULL) {
   return(ret)
 }
 
+linear_J_function = function(envs,pars) {
 
+  light_response = function(J, PPFD, J_max, phi_J, theta_J) {
+    theta_J * J^2 - J * (J_max + phi_J * PPFD) + J_max * phi_J * PPFD
+  }
+
+  J_I = stats::uniroot(light_response,
+                       c(0, pars$J_max), # lower and upper bounds
+                       PPFD = envs$PPFD,
+                       J_max = pars$J_max,
+                       phi_J = pars$phi_J,
+                       theta_J = pars$theta_J
+  )
+  return(J_I$root)
+}
