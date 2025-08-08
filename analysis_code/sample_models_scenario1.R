@@ -76,7 +76,7 @@ simulate_model_samples <- function(model_def, N, envs_template, Ci, PPFDs,param_
 }
 
 # --------- RUN IT ----------
-N <- 5  # number of parameter samples
+N <- 10000  # number of parameter samples
 
 result_arrays <- imap(models, ~ simulate_model_samples(.x, N, envs_template, Ci, PPFDs,param_mean))
 # result_arrays is a named list; each element is a 3D array [Ci, PPFD, N].
