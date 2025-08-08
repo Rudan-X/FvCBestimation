@@ -29,7 +29,7 @@ simulate_FvCB1980 <- function(envs,pars){
 
   df <- as.data.frame(Anet)
   df$Ci <- envs$C_chl # add a time or observation index
-  df <- df[,c(5:8,10)]
+  df <- df[,c("Ac","Aj","Ap","An","Ci")]
 
   # Reshape to long format
   df_long <- df %>%

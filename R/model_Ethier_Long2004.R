@@ -1,10 +1,12 @@
 #' Calculate carboxylation rate limited by three process
 #' Wc: RuBP-saturated carboxylation rate
 #' Wj: RuBP regeneration-limited carboxylation rate
+#' On the need to incorporate sensitivity to CO2 transfer  conductance into the Farquhar–von Caemmerer–Berry leaf  photosynthesis model
 #' @param envs List of environmental variables:
 #'   \describe{
 #'     \item{`PPFD`}{Photosynthetic photon flux density in μmol m\eqn{^{-2}} s\eqn{^{-1}}.}
 #'     \item{`O`}{O2 concentration in chloroplast in μmol mol\eqn{^{-1}}.}
+#'     \item{`C_i`}{CO2 concentration in intracellular space in μmol mol\eqn{^{-1}}.}
 #'
 #'   }
 #' @param pars List of parameters:
@@ -15,15 +17,12 @@
 #'     \item{`K_O`}{Michaelis-Menten constant of Rubisco for O2, same units as CO2.}
 #'     \item{`R_d`}{Day respiration in μmol m\eqn{^{-2}} s\eqn{^{-1}}.}
 #'     \item{`gamma_star`}{Chloroplastic CO2 photocompensation point, same units as CO2.}
+#'     \item{`alpha_J`}{quantum efficiency, unitless.}
+#'     \item{`theta_J`}{Convexity factor for response of J to light, unitless.}
+#'     \item{`gm`}{Mesophyll conductance in mol m\eqn{^{-2}} s\eqn{^{-1}}.}
 #'   }
-#' @param Ct Optional input (default = `NULL`). A numeric vector of two element:
-#' first is Ci transition between the Rubisco and RuBP Regeneration limitations
-#' second is Ci transition between the RuBP Regeneration and TPU limitations
 #' @return List of calculated rate:
 #'   \describe{
-#'     \item{`W_c`}{RuBP-saturated carboxylation rate in μmol m\eqn{^{-2}} s\eqn{^{-1}}.}
-#'     \item{`W_j`}{RuBP regeneration-limited carboxylation rate in μmol m\eqn{^{-2}} s\eqn{^{-1}}.}
-#'     \item{`Wmin`}{Minimum between W_c, W_j, and W_p.}
 #'     \item{`An`}{Net assimilation in μmol m\eqn{^{-2}} s\eqn{^{-1}}.}
 #'     \item{`Ac`}{Net assimilation, RuBP-saturated, in μmol m\eqn{^{-2}} s\eqn{^{-1}}.}
 #'     \item{`Aj`}{Net assimilation, RuBP regeneration-limited, in μmol m\eqn{^{-2}} s\eqn{^{-1}}.}
@@ -32,9 +31,19 @@
 #' @export
 
 
-EthierLong2004 = function(envs,pars,Ct=NULL) {
+EthierLong2004 = function(envs,pars) {
   ret = list()
+  Amin <- numeric(length(envs$C_i))
+  limiting_factor <- character(length(envs$C_i))
+  ret$Ac <- numeric(length(envs$C_i))
+  ret$Aj <- numeric(length(envs$C_i))
+
   pars$K_CO <- pars$K_C * (1 + envs$O / pars$K_O)
+
+  b <- - (pars$alpha_J * envs$PPFD + pars$J_max)
+  J <- (- b - sqrt((b)^2 - 4 * pars$theta_J * pars$alpha_J * envs$PPFD * pars$J_max)) / (2 * pars$theta_J)
+
+
   # quadratic form of Ac from equation 3
   a <- -1 / pars$gm
   b <- ((pars$V_cmax - pars$R_d) / pars$gm) + envs$C_i + pars$K_CO
@@ -44,7 +53,6 @@ EthierLong2004 = function(envs,pars,Ct=NULL) {
   ret$Ac <- (-b + sqrt_term) / (2 * a)
 
   # quadratic form of Aj from equation
-  J = 0.24 * envs$PPFD / sqrt(1 + (0.24 * envs$PPFD/pars$J_max)^2)
   a <- -4 / pars$gm
   b <- 4 * (envs$C_i + 2 * pars$gamma_star) - 4 * pars$R_d/pars$gm +  J/pars$gm
   c <- 4 * pars$R_d * (envs$C_i + 2 * pars$gamma_star) - J * (envs$C_i - pars$gamma_star)
@@ -52,30 +60,12 @@ EthierLong2004 = function(envs,pars,Ct=NULL) {
   sqrt_term <- sqrt(b^2 - 4 * a * c)
   ret$Aj <- (-b + sqrt_term) / (2 * a)
 
-  Amin <- c()
-  limiting_factor <- character(length(envs$C_i))
 
-  if (is.null(Ct)){
-    for (i in seq_along(envs$C_i)) {
-      Amin[i] <- min(ret$Ac[i], ret$Aj[i])
-      limiting_factor[i] <- c("Ac", "Aj")[which.min(c(ret$Ac[i], ret$Aj[i]))]
-    }
-  }else{
-    Ci_cj <- Ct[1]# 450
-    Ci_jp <- Ct[2]# 700
-
-    for (i in seq_along(envs$C_i)) {
-      if (envs$C_i[i] < Ci_cj ) {
-        Amin[i] <- ret$Ac[i]
-        limiting_factor[i] <- "Ac"
-      } else {
-        Wmin[i] <- ret$Aj[i]
-        limiting_factor[i] <- "Aj"
-      }
-    }
+  for (i in seq_along(envs$C_i)) {
+    Amin[i] <- min(ret$Ac[i], ret$Aj[i])
+    limiting_factor[i] <- c("Ac", "Aj")[which.min(c(ret$Ac[i], ret$Aj[i]))]
   }
 
-  # ret$Wmin = Wmin
   ret$An = Amin
   ret$Limitation <- limiting_factor
 
