@@ -40,8 +40,8 @@
 
 FvCB1980 = function(envs,pars,Ct=NULL) {
 
-  b <- - (pars$alpha_J * envs$PPFD + pars$J_max)
-  J <- (- b - sqrt((b)^2 - 4 * pars$theta_J * pars$alpha_J * envs$PPFD * pars$J_max)) / (2 * pars$theta_J)
+  bJ <- - (pars$alpha_J * envs$PPFD + pars$J_max)
+  J <- (- bJ - sqrt((bJ)^2 - 4 * pars$theta_J * pars$alpha_J * envs$PPFD * pars$J_max)) / (2 * pars$theta_J)
 
 
   K_CO <- pars$K_C * (envs$O / pars$K_O)

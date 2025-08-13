@@ -40,27 +40,27 @@
 
 Caemmerer2000 = function(envs,pars,Ct=NULL) {
 
-  b <- - (pars$alpha_J * envs$PPFD + pars$J_max)
-  J <- (- b - sqrt((b)^2 - 4 * pars$theta_J * pars$alpha_J * envs$PPFD * pars$J_max)) / (2 * pars$theta_J)
-  pars$K_CO <- pars$K_C * (envs$O / pars$K_O)
+  bJ <- - (pars$alpha_J * envs$PPFD + pars$J_max)
+  J <- (- bJ - sqrt((bJ)^2 - 4 * pars$theta_J * pars$alpha_J * envs$PPFD * pars$J_max)) / (2 * pars$theta_J)
+
+  pars$K_CO <- pars$K_C * (1 + envs$O / pars$K_O)
   ret = list(
-    # Wc = pars$V_cmax * envs$C_i / (envs$C_i + pars$K_C * (1 + 1e3 * envs$O / pars$K_O)),
     Wc = pars$V_cmax * envs$C_i / (envs$C_i + pars$K_CO),
     Wj = J * envs$C_i / (4 * envs$C_i + 8 * pars$gamma_star),
     Wp = 3 * pars$V_tpu * envs$C_i / (envs$C_i - (1 + 3*pars$alpha_tpu) * pars$gamma_star)
   )
 
-  Wmin <- c()
-  limiting_factor <- character(length(envs$C_i))
+  ret$Wmin <- numeric(length(envs$C_i))
+  ret$Limitation <- character(length(envs$C_i))
 
   if (is.null(Ct)){
     for (i in seq_along(envs$C_i)) {
       if (envs$C_i[i] > pars$gamma_star) {
-        Wmin[i] <- min(ret$Wc[i], ret$Wj[i], ret$Wp[i])
-        limiting_factor[i] <- c("Wc", "Wj", "Wp")[which.min(c(ret$Wc[i], ret$Wj[i], ret$Wp[i]))]
+        ret$Wmin[i] <- min(ret$Wc[i], ret$Wj[i], ret$Wp[i])
+        ret$Limitation[i] <- c("Wc", "Wj", "Wp")[which.min(c(ret$Wc[i], ret$Wj[i], ret$Wp[i]))]
       } else {
-        Wmin[i] <- min(ret$Wc[i], ret$Wj[i])
-        limiting_factor[i] <- c("Wc", "Wj")[which.min(c(ret$Wc[i], ret$Wj[i]))]
+        ret$Wmin[i] <- min(ret$Wc[i], ret$Wj[i])
+        ret$Limitation[i] <- c("Wc", "Wj")[which.min(c(ret$Wc[i], ret$Wj[i]))]
       }
     }
   }else{
@@ -69,25 +69,24 @@ Caemmerer2000 = function(envs,pars,Ct=NULL) {
 
     for (i in seq_along(envs$C_i)) {
       if (envs$C_i[i] < Ci_cj ) {
-        Wmin[i] <- ret$Wc[i]
-        limiting_factor[i] <- "Wc"
+        ret$Wmin[i] <- ret$Wc[i]
+        ret$Limitation[i] <- "Wc"
       } else if (envs$C_i[i] >= Ci_cj & envs$C_i[i] <= Ci_jp ) {
-        Wmin[i] <- ret$Wj[i]
-        limiting_factor[i] <- "Wj"
+        ret$Wmin[i] <- ret$Wj[i]
+        ret$Limitation[i] <- "Wj"
       }else{
-        Wmin[i] <- ret$Wp[i]
-        limiting_factor[i] <- "Wp"
+        ret$Wmin[i] <- ret$Wp[i]
+        ret$Limitation[i] <- "Wp"
       }
     }
   }
 
-  ret$Wmin = Wmin
-  ret$An = (1- pars$gamma_star/envs$C_i)*Wmin - pars$R_d
 
+  ret$An = (1- pars$gamma_star/envs$C_i)*ret$Wmin - pars$R_d
   ret$Ac = (1- pars$gamma_star/envs$C_i)*ret$Wc - pars$R_d
   ret$Aj = (1- pars$gamma_star/envs$C_i)*ret$Wj - pars$R_d
   ret$Ap = (1- pars$gamma_star/envs$C_i)*ret$Wp - pars$R_d
-  ret$Limitation <- limiting_factor
+
 
   return(ret)
 }

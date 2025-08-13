@@ -100,6 +100,23 @@ pars <- list(
 )
 
 A_2004 <- Yin2004(envs=envs,pars=pars)
+
+pars <- list(
+  V_cmax = 35,
+  J_max = 50,
+  K_C = 259,
+  K_O = 179,
+  R_d = 0.54,
+  S_co = 2592,
+  g_wp = 1.35,
+  g_ch = 0.34,
+  alpha_J=0.33,
+  theta_J=0.825
+)
+
+
+A_2012 <- Tholen2012(envs=envs,pars=pars)
+
 #
 # PARs <- c(10,20,50,70,100,300,500,700,1000,1200, 1500)
 #
