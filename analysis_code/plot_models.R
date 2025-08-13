@@ -4,7 +4,7 @@ library(purrr)
 library(tidyr)
 
 devtools::load_all()
-
+# check check
 # Grid search for environmental input:
 Ci <- c(20,50,100,150,200,300,400,500,600,700,800,1000,1200)
 PPFDs <- c(20,100,300,500,700,1000,1200,1500)
