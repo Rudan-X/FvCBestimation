@@ -93,7 +93,7 @@ g1 <- ggplot(df,
     panel.grid.major.y = element_line(linewidth = 1),
     panel.grid.major.x = element_blank()
   ) +
-  labs(x = "", y = "CI relative width (%)",
+  labs(x = "", y = "Relative CI width (%)",
        fill = "", colour= "") +
 
   scale_fill_manual(values = cols) +
@@ -213,7 +213,7 @@ g2 <- ggplot(df2, aes(y= range_perc, x = data, fill = data, colour = data)) +
   )+
   scale_fill_manual(values = cols)+
   scale_color_manual(values = cols) +
-  labs(x = "", y = "CI relative width (%)",
+  labs(x = "", y = "Relative CI width (%)",
        fill = "",  colour= "") +
   coord_cartesian(ylim = c(0, 65))+
   scale_y_continuous(breaks = seq(0, 60, 20))  # specify breaks

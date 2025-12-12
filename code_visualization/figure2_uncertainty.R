@@ -135,7 +135,7 @@ ggplot(df,
     panel.grid.major.y = element_line(linewidth = 1),
     panel.grid.major.x = element_blank()
   ) +
-  labs(x = "", y = "CI relative width (%)",
+  labs(x = "", y = "Relative CI width (%)",
        fill = "", colour= "") +
 
   scale_fill_manual(values = cols) +

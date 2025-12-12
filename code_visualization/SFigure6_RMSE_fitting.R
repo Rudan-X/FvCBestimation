@@ -217,7 +217,7 @@ ggplot(score_df, aes(x = datatype, y = rmse, fill = datatype, colour = datatype)
                vjust = -0.5, colour = "black", size = 3, fontface = "bold") +
 
   facet_wrap(.~ model, scales = "fixed") +
-  labs(x = "", y = "RMSE", colour = "Data", fill = "Data") +
+  labs(x = "", y = "RMSE", colour = "", fill = "") +
   theme_minimal(base_size = 12) +
   theme(legend.position = "bottom",
         panel.spacing.x = grid::unit(8, "pt"),

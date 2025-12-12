@@ -117,7 +117,7 @@ cols <- c("#1B9E77", "#D95F02", "#7570B3")
 ggplot(df,
        aes(x = data, y = range_perc, fill = data, colour= data)) +
   geom_boxplot( alpha = 0.5) +
-  
+
   facet_grid(variable ~ model,
              switch = "y",
              scales = "free_y",
@@ -133,9 +133,9 @@ ggplot(df,
     panel.grid.major.y = element_line(linewidth = 1),
     panel.grid.major.x = element_blank()
   ) +
-  labs(x = "", y = "CI relative width (%)",
+  labs(x = "", y = "Relative CI width (%)",
        fill = "", colour= "") +
-  
+
   scale_fill_manual(values = cols) +
   scale_color_manual(values = cols) +
   coord_cartesian(ylim = c(0, 65)) +
