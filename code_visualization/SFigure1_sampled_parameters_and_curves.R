@@ -12,14 +12,14 @@ true_params_df <- map_dfr(sampled_params, ~as.data.frame(.x), .id = "iter")[,-1]
 true_df <- melt(true_params_df)
 
 true_df$Models <- "All models"
-true_df$Models[true_df$variable%in%c("gm")] <- "H92,E04&X21"# "Harley92,Ethier04&Xiao20"
-true_df$Models[true_df$variable%in%c("V_tpu")] <- "vC00,D07&B17"# "vonCaemmerer00,Dubois07&Busch18"
-true_df$Models[true_df$variable%in%c("alpha_G")] <- "vC00&D07"# "vonCaemmerer00,Dubois07"
-true_df$Models[true_df$variable%in%c("g_ch","g_wp")] <- "T12" # "Tholen12"
+true_df$Models[true_df$variable%in%c("gm")] <- "Harley92,Ethier04&Xiao21"# "Harley92,Ethier04&Xiao20"
+true_df$Models[true_df$variable%in%c("V_tpu")] <- "vonC00,Dubois07&Busch18"# "vonCaemmerer00,Dubois07&Busch18"
+true_df$Models[true_df$variable%in%c("alpha_G")] <- "vonC00&Dubois07"# "vonCaemmerer00,Dubois07"
+true_df$Models[true_df$variable%in%c("g_ch","g_wp")] <- "Tholen12" # "Tholen12"
 
-true_df$Models[true_df$variable%in%c("h","f_Q","f_pseudo","phi2m")] <- "Y04"# "Yin04"
-true_df$Models[true_df$variable%in%c("max_aG","max_aS", "N_max")] <- "B17"#"Busch18"
-true_df$Models[true_df$variable%in%c("s","Phi2LL")] <- "X21"# "Xiao20"
+true_df$Models[true_df$variable%in%c("h","f_Q","f_pseudo","phi2m")] <- "Yin04"# "Yin04"
+true_df$Models[true_df$variable%in%c("max_aG","max_aS", "N_max")] <- "Busch18"#"Busch18"
+true_df$Models[true_df$variable%in%c("s","Phi2LL")] <- "Xiao21"# "Xiao20"
 
 vars <- c("V_cmax","J_max", "R_d", "gamma_star","theta_J", "alpha_J","K_C", "K_O",
           "gm","V_tpu","alpha_G", "phi2m", "f_Q","f_pseudo", "h","max_aG","max_aS","N_max",
@@ -27,10 +27,10 @@ vars <- c("V_cmax","J_max", "R_d", "gamma_star","theta_J", "alpha_J","K_C", "K_O
 
 true_df$variable <- factor(true_df$variable, levels=vars)
 
-true_df$Models <- factor(true_df$Models, levels=c("All models","H92,E04&X21",
-                                              "vC00,D07&B17",
-                                              "vC00&D07",
-                                              "T12","Y04", "B17", "X21"))
+true_df$Models <- factor(true_df$Models, levels=c("All models","Harley92,Ethier04&Xiao21",
+                                              "vonC00,Dubois07&Busch18",
+                                              "vonC00&Dubois07",
+                                              "Tholen12","Yin04", "Busch18", "Xiao21"))
 
 exp_vec <- c(expression(V[cmax]), expression(J[max]),
              expression(R[d]),expression(Gamma^"*"),
@@ -84,13 +84,13 @@ summary_df <- synth_curves %>%
     .groups = 'drop'
   )
 
-summary_df$Model[summary_df$Model=="Caemmerer00"] <- "vonCaemmerer00"
-summary_df$Model[summary_df$Model=="Busch18"] <- "Busch17"
+summary_df$Model[summary_df$Model=="Caemmerer00"] <- "vonC00"
+# summary_df$Model[summary_df$Model=="Busch18"] <- "Busch17"
 summary_df$Model[summary_df$Model=="Xiao20"] <- "Xiao21"
 
-curves_name <- c("FvCB80", "Harley92","vonCaemmerer00",
+curves_name <- c("FvCB80", "Harley92","vonC00",
                  "Ethier04", "Yin04", "Dubois07",
-                 "Tholen12", "Busch17", "Xiao21" )
+                 "Tholen12", "Busch18", "Xiao21" )
 
 summary_df$Model <- factor(summary_df$Model, levels = curves_name)
 

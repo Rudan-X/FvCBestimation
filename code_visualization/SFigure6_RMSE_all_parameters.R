@@ -55,17 +55,17 @@ df <- df[df$model_scen!="Xiao20_ACi(different Q) & CF",]
 df <- df %>%
   separate(model_scen, into = c("model", "datatype"), sep = "_", extra = "merge")
 
-df$model[df$model=="Caemmerer00"] <- "vonC.00"
-df$model[df$model=="Busch18"] <- "Busch17"
+df$model[df$model=="Caemmerer00"] <- "vonC00"
+# df$model[df$model=="Busch18"] <- "Busch17"
 df$datatype[df$datatype=="ACi(satQ)"] <- "Single A-Ci"
 df$datatype[df$datatype=="ACi & AQ"] <- "A-Ci & A-Q"
 df$datatype[df$datatype=="ACi(different Q)"] <- "Multiple A-Ci"
 
 
 
-newmodels <-  c("FvCB80", "Harley92","vonC.00",
+newmodels <-  c("FvCB80", "Harley92","vonC00",
                 "Ethier04", "Yin04","Dubois07",
-                "Tholen12", "Busch17","Xiao20")
+                "Tholen12", "Busch18","Xiao20")
 
 
 datatypes <- c("Single A-Ci", "A-Ci & A-Q", "Multiple A-Ci")
@@ -79,15 +79,16 @@ df$datatype <- factor(df$datatype,levels=datatypes)
 
 midp <- min(df$relativeRMSE,na.rm =T)+(max(df$relativeRMSE,na.rm =T)-min(RMSE_mat,na.rm =T))/2
 
-exp_vec <- c(expression(V[cmax]), expression(J[max]),
-             expression(R[d]),expression(Gamma^"*"),
-             expression(theta[J]),expression(alpha[J]),
-             expression(K[CO]),
-             expression(g[m]),expression(V[TPU]),expression(alpha[G]),
-             expression(Phi[IIm]), expression(f[Q]),expression(f[pseudo]),"h",
-             expression(g[ch]),expression(g[wp]),
-             expression(max[aG]),expression(max[aS]),expression(N[max]),
-             "s",expression(Phi[IILL]))
+exp_vec <- c(expression(italic(V[cmax])), expression(italic(J[max])),
+             expression(italic(R[d])),expression(italic("Γ*")),
+             expression(italic(theta[J])),
+             expression(italic(alpha[J])),
+             expression(italic(K[CO])),
+             expression(italic(g[m])),expression(italic(V[TPU])),expression(italic(alpha[G])),
+             expression(italic(Phi[IIm])),expression(italic(f[Q])),expression(italic(f[pseudo])),expression(italic("h")),
+             expression(italic(g[ch])),expression(italic(g[wp])),
+             expression(italic(max[aG])),expression(italic(max[aS])),expression(italic(N[max])),
+             expression(italic("s")),expression(italic(Phi[IILL])))
 
 ggplot(df, aes(x = model, y = param, fill = relativeRMSE, label = round(relativeRMSE, 2))) +
   geom_tile(color = "white") +
@@ -105,4 +106,4 @@ ggplot(df, aes(x = model, y = param, fill = relativeRMSE, label = round(relative
 
 
 
-ggsave(filename = paste0("results/Figures/SFig5_RMSE_all_params.png"),width = 7, height = 7)
+ggsave(filename = paste0("results/Figures/SFig6_RMSE_all_params.png"),width = 7, height = 7)

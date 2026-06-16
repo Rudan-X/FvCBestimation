@@ -227,9 +227,9 @@ library(ggplot2)
 df <- imap_dfr(p_sim, ~ mutate(.x, key = .y))
 df$model <- sub("^rep\\d+_([^_]+)_.*$", "\\1", df$key)
 
-df$model[df$model== "Caemmerer00"] <-  "vonCaemmerer00"
-df$model[df$model== "Busch18"] <-  "Busch17"
-df$model <- factor(df$model,levels=c("vonCaemmerer00", "Dubois07","Busch17"))
+df$model[df$model== "Caemmerer00"] <-  "vonC00"
+# df$model[df$model== "Busch18"] <-  "Busch17"
+df$model <- factor(df$model,levels=c("vonC00", "Dubois07","Busch18"))
 df$Limitation <- factor(df$Limitation,
   levels = c( "Wc", "Wj", "Wp","Ac", "Aj", "Ap")
 )

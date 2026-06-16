@@ -193,8 +193,8 @@ for (rep_x in 1:100){
 
 
 score_df <- score_df[score_df$datatype!="ACi(different Q) & CF",]
-score_df$model[score_df$model=="Caemmerer00"] <- "vonCaemmerer00"
-score_df$model[score_df$model=="Busch18"] <- "Busch17"
+score_df$model[score_df$model=="Caemmerer00"] <- "vonC00"
+# score_df$model[score_df$model=="Busch18"] <- "Busch17"
 score_df$model[score_df$model=="Xiao20"] <- "Xiao21"
 score_df$datatype[score_df$datatype=="ACi(satQ)"] <- "Single A-Ci"
 score_df$datatype[score_df$datatype=="ACi & AQ"] <- "A-Ci & A-Q"
@@ -203,9 +203,9 @@ score_df$datatype[score_df$datatype=="ACi(different Q)"] <- "Multiple A-Ci"
 datatypes <- c("Single A-Ci", "A-Ci & A-Q", "Multiple A-Ci")
 score_df$datatype <- factor(score_df$datatype,levels= datatypes)
 
-newmodels <-  c("FvCB80", "Harley92","vonCaemmerer00",
+newmodels <-  c("FvCB80", "Harley92","vonC00",
                 "Ethier04", "Yin04","Dubois07",
-                "Tholen12", "Busch17","Xiao21")
+                "Tholen12", "Busch18","Xiao21")
 score_df$model <- factor(score_df$model,levels= newmodels)
 
 
@@ -227,5 +227,5 @@ ggplot(score_df, aes(x = datatype, y = rmse, fill = datatype, colour = datatype)
   scale_color_manual(values = cols)
 
 
-ggsave(filename = paste0("results/Figures/SFig6_RMSE_fitting.png"),width = 7, height = 6)
+ggsave(filename = paste0("results/Figures/SFig7_RMSE_fitting.png"),width = 7, height = 6)
 

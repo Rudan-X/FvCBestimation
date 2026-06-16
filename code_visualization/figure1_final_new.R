@@ -32,17 +32,17 @@ digraph {
     Dubois07    [label='Dubois (2007)']
     Tholen12   [label='Tholen (2012)']
     Xiao20    [label='Xiao (2021)']
-    Busch18    [label='Busch (2017)']
+    Busch18    [label='Busch (2018)']
 
-    Harley92_Cc   [label='Harley92:Cc'  fillcolor='white']
+    Harley92_Cc   [label='Harley92:Cc'  fillcolor='#E5D4FF']
     # Harley92_Aj   [label='Harley92:Aj'  fillcolor='#E6FFFB']
     Caemmerer00_Ap [label='Caemmerer00:Ap' fillcolor='#FFF1B6']
     Ethier04_Ac    [label='Ethier04:Ac'   fillcolor='#FDE2E4']
     Ethier04_Aj    [label='Ethier04:Aj'   fillcolor='#E6FFFB']
     Yin04_Aj       [label='Yin04:Aj'      fillcolor='#E6FFFB']
-    Busch18_Aj     [label='Busch17:Aj'    fillcolor='#E6FFFB']
-    Busch18_Ap     [label='Busch17:Ap'    fillcolor='#FFF1B6']
-    Tholen12_gm    [label='Tholen12:gch,gwp' fillcolor='#E5D4FF']
+    Busch18_Aj     [label='Busch18:Aj'    fillcolor='#E6FFFB']
+    Busch18_Ap     [label='Busch18:Ap'    fillcolor='#FFF1B6']
+    Tholen12_gm    [label='Tholen12:Cc' fillcolor='#E5D4FF']
 
 
   }
@@ -67,25 +67,25 @@ digraph {
   FvCB80 -> Tholen12 [color='black' style=solid]
 
   # New model to new component
-  Harley92 -> Harley92_Cc [label='gm' color='blue' style=dashed]
+  Harley92 -> Harley92_Cc [label='gm' color='blue' style=dashed dir=back]
   # Harley92 -> Harley92_Aj [label='gm' color='blue' style=dashed]
 
-  Caemmerer00 -> Caemmerer00_Ap [label='TPU from Sharkey' color='blue' style=dashed]
+  Caemmerer00 -> Caemmerer00_Ap [label='TPU from Sharkey' color='blue' style=dashed  dir=back]
 
-  Caemmerer00 -> Dubois07 [label='min(Ac,Aj,Ap)' color='blue' style=dashed]
+  Caemmerer00 -> Dubois07 [label='min(Ac,Aj,Ap)']
 
-  Ethier04 -> Ethier04_Ac [label='Quadratic form' color='blue' style=dashed]
-  Ethier04 -> Ethier04_Aj [label='Quadratic form' color='blue' style=dashed]
+  Ethier04 -> Ethier04_Ac [label='Quadratic form' color='blue' style=dashed  dir=back]
+  Ethier04 -> Ethier04_Aj [label='Quadratic form' color='blue' style=dashed  dir=back]
   Ethier04 -> Xiao20 [color='black' style=solid]
 
-  Yin04 -> Yin04_Aj [label='Alternative ETC' color='blue' style=dashed]
+  Yin04 -> Yin04_Aj [label='Alternative ETC' color='blue' style=dashed  dir=back]
 
   # Dubois07 -> Dubois07_gm [label='gm & leakiness' color='blue' style=dashed]
 
-  Tholen12 -> Tholen12_gm [label='New gm definition' color='blue' style=dashed]
+  Tholen12 -> Tholen12_gm [label='New gm definition (gch,gwp)' color='blue' style=dashed  dir=back]
 
-  Busch18 -> Busch18_Aj [label='N assimilation' color='blue' style=dashed]
-  Busch18 -> Busch18_Ap [color='blue' style=dashed]
+  Busch18 -> Busch18_Aj [label='N assimilation' color='blue' style=dashed  dir=back]
+  Busch18 -> Busch18_Ap [label='N assimilation' color='blue' style=dashed  dir=back]
 
 
 }
@@ -102,9 +102,9 @@ rsvg_png(charToRaw(svg_txt),
 load(file="results/Rdata/fig1_simulated_curves_nonoise.RData")
 
 
-curves_name <- c("FvCB80", "Harley92","vonCaemmerer00",
+curves_name <- c("FvCB80", "Harley92","vonC00",
                  "Ethier04", "Yin04", "Dubois07",
-                 "Tholen12", "Busch17", "Xiao21" )
+                 "Tholen12", "Busch18", "Xiao21" )
 names(simulated_curves) <- curves_name
 
 df <- map_dfr(simulated_curves, ~as.data.frame(.x), .id = "Model")
@@ -115,7 +115,7 @@ df$Model <- factor(df$Model,levels=curves_name)
 ggplot(df, aes(Ci, An, color = Model, shape=Model)) + #
   # geom_line(linewidth = 0.5, linetype = "dashed") +
   geom_point(size = 1.5 ) +
-  facet_wrap(~PPFD, ncol = 3, dir = "v") +
+  facet_wrap(~PPFD, ncol = 3, dir = "h") +
   labs(x = expression(C[i]~"(µmol mol"^{-1}*")"),
        y = expression(An~"(µmol m"^{-2}~s^{-1}*")"),
        color = "Model") +

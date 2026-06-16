@@ -39,9 +39,9 @@ bounds <- list(
 common_par <-c("theta_J","alpha_J", "K_C", "K_O") #,
 
 
-newmodels <-  c("FvCB80", "Harley92","vonC.00",
+newmodels <-  c("FvCB80", "Harley92","vonC00",
                 "Ethier04", "Yin04","Dubois07",
-                "Tholen12", "Busch17","Xiao21")
+                "Tholen12", "Busch18","Xiao21")
 
 
 models <-  c("FvCB80", "Harley92","Caemmerer00",
@@ -93,7 +93,7 @@ g1 <- ggplot(df,
     panel.grid.major.y = element_line(linewidth = 1),
     panel.grid.major.x = element_blank()
   ) +
-  labs(x = "", y = "Relative CI width (%)",
+  labs(x = "", y = "RCI (%)",
        fill = "", colour= "") +
 
   scale_fill_manual(values = cols) +
@@ -161,8 +161,8 @@ var_map <- c(
 combos <- tibble::tribble(
   ~model,     ~variable,
   "Harley92","gm",
-  "vonC.00","V_tpu",
-  "vonC.00","alpha_G",
+  "vonC00","V_tpu",
+  "vonC00","alpha_G",
   "Ethier04","gm",
   "Yin04","phi2m",
   "Yin04","f_Q",
@@ -172,10 +172,10 @@ combos <- tibble::tribble(
   "Dubois07","alpha_G" ,
   "Tholen12","g_ch" ,
   "Tholen12","g_wp" ,
-  "Busch17","V_tpu",
-  "Busch17","max_aG",
-  "Busch17","max_aS",
-  "Busch17","N_max"  ,
+  "Busch18","V_tpu",
+  "Busch18","max_aG",
+  "Busch18","max_aS",
+  "Busch18","N_max"  ,
   "Xiao21","gm",
   "Xiao21","s",
   "Xiao21","Phi2LL"
@@ -213,7 +213,7 @@ g2 <- ggplot(df2, aes(y= range_perc, x = data, fill = data, colour = data)) +
   )+
   scale_fill_manual(values = cols)+
   scale_color_manual(values = cols) +
-  labs(x = "", y = "Relative CI width (%)",
+  labs(x = "", y = "RCI (%)",
        fill = "",  colour= "") +
   coord_cartesian(ylim = c(0, 65))+
   scale_y_continuous(breaks = seq(0, 60, 20))  # specify breaks
@@ -223,6 +223,6 @@ g2
 library("ggpubr")
 ggarrange(g1,g2,labels = c('a', 'b'), ncol=1, heights = c(0.8,1))
 
-ggsave(filename = paste0("results/Figures/SFig2_remain.png.png"),width = 7, height = 8)
+ggsave(filename = paste0("results/Figures/SFig2_remain.png"),width = 7, height = 8)
 
 

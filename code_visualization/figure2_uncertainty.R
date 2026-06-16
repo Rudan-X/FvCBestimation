@@ -39,9 +39,9 @@ bounds <- list(
 common_par <-c("V_cmax","J_max","R_d","gamma_star") #,"theta_J","alpha_J", "K_C", "K_O"
 
 
-newmodels <-  c("FvCB80", "Harley92","vonCaemmerer00",
+newmodels <-  c("FvCB80", "Harley92","vonC00",
               "Ethier04", "Yin04","Dubois07",
-              "Tholen12", "Busch17","Xiao21")
+              "Tholen12", "Busch18","Xiao21")
 
 
 models <-  c("FvCB80", "Harley92","Caemmerer00",
@@ -104,10 +104,10 @@ df$model <- factor(df$model, levels = newmodels)
 df <- df[df$variable%in%common_par,]
 df$variable <- factor(df$variable, levels = common_par)
 
-exp_vec <- c(expression(V[cmax]),
-             expression(J[max]),
-             expression(R[d]),
-             expression(Gamma^"*"))
+exp_vec <- c(expression(italic(V[cmax])),
+             expression(italic(J[max])),
+             expression(italic(R[d])),
+             expression(italic("Γ*")))
 # ,
 #              expression(theta[J]),
 #              expression(alpha[J]),
@@ -135,7 +135,7 @@ ggplot(df,
     panel.grid.major.y = element_line(linewidth = 1),
     panel.grid.major.x = element_blank()
   ) +
-  labs(x = "", y = "Relative CI width (%)",
+  labs(x = "", y = "RCI (%)",
        fill = "", colour= "") +
 
   scale_fill_manual(values = cols) +

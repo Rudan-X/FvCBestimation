@@ -5,8 +5,7 @@ library(ggplot2)
 library(purrr)
 library(reshape2)
 library(ggpubr)
-
-setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation/")
+setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation_not_uploaded_true/")
 
 ACi <- read.csv("data/2022_ACi_rawData_barley.csv")
 AQ <- read.csv("data/2022_AQcurves_rawData_barley.csv")
@@ -22,8 +21,8 @@ genotype_id <- intersect(ACi$genotype, AQ$genotype)
 datatypes <- c("ACi", "ACi & AQ")
 com_pars <- c("V_cmax", "J_max", "R_d", "gamma_star","theta_J","alpha_J","K_CO")
 
-models <- c("FvCB80", "Harley92", "vonC.00", "Ethier04", "Yin04",
-            "Dubois07", "Tholen12", "Busch17", "Xiao21" )
+models <- c("FvCB80", "Harley92", "vonC00", "Ethier04", "Yin04",
+            "Dubois07", "Tholen12", "Busch18", "Xiao21" )
 models0 <- c("FvCB80", "Harley92", "Caemmerer00", "Ethier04", "Yin04",
             "Dubois07", "Tholen12", "Busch18", "Xiao20" )
 
@@ -132,6 +131,7 @@ p1 <- as.ggplot(g1$gtable)
 p2 <- as.ggplot(g2$gtable)
 
 ggarrange(p1, p2, labels = c("a", "b"), ncol = 1)
+setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation/")
 
-ggsave(filename = paste0("results/Figures/SFig9_model_dendrogram.png"),width = 6, height = 7)
+ggsave(filename = paste0("results/Figures/SFig10_model_dendrogram.png"),width = 6, height = 7)
 

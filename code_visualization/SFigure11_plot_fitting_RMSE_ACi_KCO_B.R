@@ -8,6 +8,7 @@ library(reshape2)
 
 setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation/")
 
+
 devtools::load_all()
 
 rst_functions <- stan_model(model_code = stan_all_functions_KCO)
@@ -117,16 +118,16 @@ mse      <- function(y, yhat) mean((y - yhat)^2, na.rm = TRUE)
 rmse     <- function(y, yhat) sqrt(mse(y, yhat))
 
 
-models <- c("FvCB80", "Harley92", "vonCaemmerer00", "Ethier04", "Yin04",
-            "Dubois07", "Tholen12", "Busch17", "Xiao21" )
+models <- c("FvCB80", "Harley92", "vonC00", "Ethier04", "Yin04",
+            "Dubois07", "Tholen12", "Busch18", "Xiao21" )
 
 models0 <- c("FvCB80", "Harley92", "Caemmerer00", "Ethier04", "Yin04",
              "Dubois07", "Tholen12", "Busch18", "Xiao20" )
 
 df_final <- list()
-
+setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation_not_uploaded_true/")
 ##################################################
-for (scena in 2:2){
+for (scena in 1:2){
   ACi <- read.csv("data/2022_ACi_rawData_barley.csv")
   AQ <- read.csv("data/2022_AQcurves_rawData_barley.csv")
 
@@ -375,7 +376,12 @@ for (scena in 2:2){
 
   df_final[[scena]] <- score_df
 }
+
+setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation/")
 save(df_final, file="results/Rdata/data_visualization/SFig10_RMSE.RData")
+
+load(file="results/Rdata/data_visualization/SFig10_RMSE.RData")
+
 
 library("ggpubr")
 figs <- list()
@@ -400,5 +406,5 @@ for (scena in 1:2){
 ggarrange(figs[[1]],figs[[2]],labels = c('a', 'b'), ncol=1, heights = c(0.8,1))
 
 
-ggsave(filename = paste0("results/Figures/SFig10_model_RMSE.png"),width = 7, height = 7)
+ggsave(filename = paste0("results/Figures/SFig11_model_RMSE.png"),width = 7, height = 7)
 

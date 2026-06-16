@@ -70,7 +70,7 @@ g2
 
 ggarrange(g1,g2,labels = c('a', 'b'), ncol=1, heights = c(0.85,1))
 
-ggsave(filename = paste0("results/Figures/SFig7_real_data_distribution.png"),width = 7, height = 9)
+ggsave(filename = paste0("results/Figures/SFig8_real_data_distribution.png"),width = 7, height = 9)
 
 
 

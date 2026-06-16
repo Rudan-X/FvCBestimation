@@ -5,7 +5,7 @@ library(ggplot2)
 library(purrr)
 library(reshape2)
 
-setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation/")
+setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation_not_uploaded_true/")
 
 ACi <- read.csv("data/2022_ACi_rawData_barley.csv")
 AQ <- read.csv("data/2022_AQcurves_rawData_barley.csv")
@@ -24,8 +24,8 @@ com_pars <- c("V_cmax", "J_max", "R_d", "gamma_star","theta_J","alpha_J","K_CO",
               "g_ch",  "g_wp","s","Phi2LL" )
 
 
-models <- c("FvCB80", "Harley92", "vonC.00", "Ethier04", "Yin04",
-            "Dubois07", "Tholen12", "Busch17", "Xiao21" )
+models <- c("FvCB80", "Harley92", "vonC00", "Ethier04", "Yin04",
+            "Dubois07", "Tholen12", "Busch18", "Xiao21" )
 
 models0 <- c("FvCB80", "Harley92", "Caemmerer00", "Ethier04", "Yin04",
             "Dubois07", "Tholen12", "Busch18", "Xiao20" )
@@ -228,16 +228,16 @@ corr_df2 <- melt(cor_mat)
 colnames(corr_df2) <- c("parameter","model","correlation")
 corr_df2$compare <- "Genotype- vs plant-level"
 
-exp_vec <- c(expression(V[cmax]), expression(J[max]),
-             expression(R[d]),expression(Gamma^"*"),
-             expression(theta[J]),expression(alpha[J]),
-             expression(K[CO]),
-             expression(g[m]),expression(V[TPU]),expression(alpha[G]),
-             expression(Phi[IIm]),
-             expression(f[Q]),expression(f[pseudo]),
-             "h",expression(g[ch]),expression(g[wp]),
-             expression(max[aG]),expression(max[aS]), expression(N[max]),
-             "s",expression(Phi[IILL]))
+exp_vec <- c(expression(italic(V[cmax])), expression(italic(J[max])),
+             expression(italic(R[d])),expression(italic("Γ*")),
+             expression(italic(theta[J])),
+             expression(italic(alpha[J])),
+             expression(italic(K[CO])),
+             expression(italic(g[m])),expression(italic(V[TPU])),expression(italic(alpha[G])),
+             expression(italic(Phi[IIm])),expression(italic(f[Q])),expression(italic(f[pseudo])),expression(italic("h")),
+             expression(italic(g[ch])),expression(italic(g[wp])),
+             expression(italic(max[aG])),expression(italic(max[aS])),expression(italic(N[max])),
+             expression(italic("s")),expression(italic(Phi[IILL])))
 
 
 corr_df <- rbind(corr_df1,corr_df2)
@@ -252,23 +252,6 @@ midp <- mincor+(maxcor-mincor)/2
 
 ggplot(corr_df, aes(x = model, y = parameter, fill = correlation, label = round(correlation, 2))) +
   geom_tile(color = "white") +
-  geom_text(size = 3, na.rm = TRUE) +  # adds correlation values
-  scale_fill_gradient2(low = "#77DD77",   mid = "#FFF176",    high = "#FFB347", midpoint = midp,
-                       limits = c(mincor, maxcor), name = "Correlation") +
-  theme_minimal(base_size = 12) +
-  theme(axis.text = element_text(size = 10),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.title = element_blank(),
-        legend.position = "bottom",
-        strip.text.x = element_text(face="bold")) +
-  facet_grid(.~compare) +
-  scale_y_discrete(labels = rev(exp_vec))
-
-ggsave(filename = paste0("results/Figures/SFig8_plant_vs_plot_text.png"),width = 6, height = 7)
-
-
-ggplot(corr_df, aes(x = model, y = parameter, fill = correlation, label = round(correlation, 2))) +
-  geom_tile(color = "white") +
   scale_fill_gradient2(low = "#77DD77",   mid = "#FFF176",    high = "#FFB347", midpoint = midp,
                        limits = c(mincor, maxcor), name = "Correlation") +
   theme_minimal(base_size = 12) +
@@ -280,6 +263,29 @@ ggplot(corr_df, aes(x = model, y = parameter, fill = correlation, label = round(
   facet_grid(.~compare) +
   scale_y_discrete(labels = rev(exp_vec))
 
-ggsave(filename = paste0("results/Figures/SFig8_plant_vs_plot.png"),width = 6, height = 7)
+setwd("C:/Users/Rudan/Documents/GitHub/FvCBestimation/")
+ggsave(filename = paste0("results/Figures/SFig9_plant_vs_plot.png"),width = 6, height = 7)
+
+
+
+ggplot(corr_df, aes(x = model, y = parameter, fill = correlation, label = round(correlation, 2))) +
+  geom_tile(color = "white") +
+  # geom_text(size = 3, na.rm = TRUE) +  # adds correlation values
+  scale_fill_gradient2(low = "#77DD77",   mid = "#FFF176",    high = "#FFB347", midpoint = midp,
+                       limits = c(mincor, maxcor), name = "Correlation") +
+  theme_minimal(base_size = 12) +
+  theme(axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.title = element_blank(),
+        legend.position = "bottom",
+        strip.text.x = element_text(face="bold")) +
+  facet_grid(.~compare) +
+  scale_y_discrete(labels = rev(exp_vec))
+
+
+ggsave(filename = paste0("results/Figures/SFig8_plant_vs_plot_text.png"),width = 6, height = 7)
+
+
+
 
 

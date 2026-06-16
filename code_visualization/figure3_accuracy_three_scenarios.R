@@ -71,7 +71,8 @@ library(reshape2)
 
 # convert correlation matrix to long format
 df1 <- melt(cor_mat, varnames = c("model_scen", "param"), value.name = "correlation")
-df1$estimation <- "Estimating all parameters"
+# df1$estimation <- "Estimating all parameters"
+df1$estimation <- "Scenario 1"
 
 ##################################################################
 # start <- T
@@ -130,7 +131,8 @@ for (param in param_name){
 
 
 df2 <- melt(cor_mat, varnames = c("model_scen", "param"), value.name = "correlation")
-df2$estimation <- "Estimating core parameters\nnon-core fixed with true value"
+# df2$estimation <- "Estimating core parameters\nnon-core fixed with true value"
+df2$estimation <- "Scenario 3"
 ##################################################################
 # start <- T
 # for (rep_x in 1:100){
@@ -188,7 +190,8 @@ for (param in param_name){
 
 
 df3 <- melt(cor_mat, varnames = c("model_scen", "param"), value.name = "correlation")
-df3$estimation <- "Estimating core parameters\nnon-core fixed with median value"
+# df3$estimation <- "Estimating core parameters\nnon-core fixed with median value"
+df3$estimation <- "Scenario 2"
 
 
 df <- rbind(df1,df2)
@@ -198,8 +201,8 @@ df <- df[df$model_scen!="Xiao20_ACi(different Q) & CF",]
 df <- df %>%
   separate(model_scen, into = c("model", "datatype"), sep = "_", extra = "merge")
 
-df$model[df$model=="Caemmerer00"] <- "vonC.00"
-df$model[df$model=="Busch18"] <- "Busch17"
+df$model[df$model=="Caemmerer00"] <- "vonC00"
+# df$model[df$model=="Busch18"] <- "Busch17"
 df$model[df$model=="Xiao20"] <- "Xiao21"
 df$datatype[df$datatype=="ACi(satQ)"] <- "Single A-Ci"
 df$datatype[df$datatype=="ACi & AQ"] <- "A-Ci & A-Q"
@@ -208,24 +211,25 @@ df$datatype[df$datatype=="ACi(different Q)"] <- "Multiple A-Ci"
 
 df$param <- factor(df$param,levels=param_name)
 
-newmodels <-  c("FvCB80", "Harley92","vonC.00",
+newmodels <-  c("FvCB80", "Harley92","vonC00",
                 "Ethier04", "Yin04","Dubois07",
-                "Tholen12", "Busch17","Xiao21")
+                "Tholen12", "Busch18","Xiao21")
 
 df$model <- factor(df$model,levels=newmodels)
 
 datatypes <- c("Single A-Ci", "A-Ci & A-Q", "Multiple A-Ci")
 df$datatype <- factor(df$datatype, levels=datatypes)
+df$estimation <- factor(df$estimation, levels= c("Scenario 1", "Scenario 2", "Scenario 3"))
 
 
 check <- df %>% group_by(param,datatype) %>%
   summarise(mean_correlation = mean(correlation, na.rm = TRUE))
 
 
-exp_vec <- c(expression(V[cmax]),
-             expression(J[max]),
-             expression(R[d]),
-             expression(Gamma^"*"))
+exp_vec <- c(expression(italic(V[cmax])),
+             expression(italic(J[max])),
+             expression(italic(R[d])),
+             expression(italic("Γ*")))
 
 levels(df$param)<- exp_vec
 

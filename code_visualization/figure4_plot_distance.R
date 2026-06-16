@@ -22,8 +22,8 @@ genotype_id <- intersect(ACi$genotype, AQ$genotype)
 datatypes <- c("ACi", "ACi & AQ")
 com_pars <- c("V_cmax", "J_max", "R_d", "gamma_star","theta_J","alpha_J","K_CO")
 
-models <- c("FvCB80", "Harley92", "vonC.00", "Ethier04", "Yin04",
-            "Dubois07", "Tholen12", "Busch17", "Xiao21" )
+models <- c("FvCB80", "Harley92", "vonC00", "Ethier04", "Yin04",
+            "Dubois07", "Tholen12", "Busch18", "Xiao21" )
 models0 <- c("FvCB80", "Harley92", "Caemmerer00", "Ethier04", "Yin04",
             "Dubois07", "Tholen12", "Busch18", "Xiao20" )
 

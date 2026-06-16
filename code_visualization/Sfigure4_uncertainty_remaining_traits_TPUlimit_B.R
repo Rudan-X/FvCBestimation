@@ -130,9 +130,9 @@ load(file="results/Rdata/data_visualization/Sfig_TPU_ind.RData")
 #
 # save(df_notpu, file = "results/Rdata/data_visualization/fig2_CIranges_notpu.RData")
 ###################################################################################
-newmodels <-  c("FvCB80", "Harley92","vonC.00",
+newmodels <-  c("FvCB80", "Harley92","vonC00",
                 "Ethier04", "Yin04","Dubois07",
-                "Tholen12", "Busch17","Xiao21")
+                "Tholen12", "Busch18","Xiao21")
 
 
 models <-  c("FvCB80", "Harley92","Caemmerer00",
@@ -177,16 +177,16 @@ var_map <- c(
 
 combos <- tibble::tribble(
   ~model,     ~variable,
-  "vonC.00","V_tpu",
-  "vonC.00","alpha_G",
+  "vonC00","V_tpu",
+  "vonC00","alpha_G",
 
   "Dubois07","V_tpu",
   "Dubois07","alpha_G" ,
 
-  "Busch17","V_tpu",
-  "Busch17","max_aG",
-  "Busch17","max_aS",
-  "Busch17","N_max"
+  "Busch18","V_tpu",
+  "Busch18","max_aG",
+  "Busch18","max_aS",
+  "Busch18","N_max"
 )
 
 df1 <- semi_join(df, combos, by = c("model","variable")) %>%
@@ -240,16 +240,16 @@ var_map <- c(
 
 combos <- tibble::tribble(
   ~model,     ~variable,
-  "vonC.00","V_tpu",
-  "vonC.00","alpha_G",
+  "vonC00","V_tpu",
+  "vonC00","alpha_G",
 
   "Dubois07","V_tpu",
   "Dubois07","alpha_G" ,
 
-  "Busch17","V_tpu",
-  "Busch17","max_aG",
-  "Busch17","max_aS",
-  "Busch17","N_max"
+  "Busch18","V_tpu",
+  "Busch18","max_aG",
+  "Busch18","max_aS",
+  "Busch18","N_max"
 )
 
 df2 <- semi_join(df, combos, by = c("model","variable")) %>%
@@ -296,7 +296,7 @@ g2 <- ggplot(df, aes(y= range_perc, x = data, fill = type, colour = type)) +
 library("ggpubr")
 ggarrange(g1,g2,labels = c('a', 'b'), ncol=1, heights = c(0.8,1))
 
-ggsave(filename = paste0("results/Figures/SFig2b_TPUeffect.png.png"),width = 7, height = 8)
+ggsave(filename = paste0("results/Figures/SFig4_TPUeffect.png.png"),width = 7, height = 8)
 
 
 
